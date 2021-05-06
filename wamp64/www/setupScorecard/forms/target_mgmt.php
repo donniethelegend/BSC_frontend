@@ -123,15 +123,29 @@ $(document).ready(function(){
     var outcome = "";
     var objective ="";
       
-     
+     var row = "";
        $.each(xhr.data,function(i,v){
+           row = "<tr>";
+       if(v.cat_name!=category){
+           row += "<td colspan='7'>"+v.cat_name+"</td>";
+           row += "<td colspan='7'>"+v.cat_name+"</td>";
            
-       
+       }
+       if(v.out_name != outcome){
+           
+       }
+       if(v.obj_name != objective){
+           
+           
+       }
         
            tbody.append('<tr>\n\
    <td colspan="7">'+v.cat_name+'</td>\n\
-<td>'+v.outcome_name+'</td><td>'+v.category_name+'</td></tr>')
-           
+<td>'+v.outcome_name+'</td><td>'+v.category_name+'</td></tr>');
+        
+        
+        
+        
        });
        
        
