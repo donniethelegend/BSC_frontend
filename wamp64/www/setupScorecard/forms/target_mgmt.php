@@ -20,13 +20,24 @@
       <div class="table-responsive">
           
          
-        <table id ="tbl_objectivelist" class="table table-striped table-sm">
+        <table id ="tbl_indicatorslist" class="table table-striped table-sm">
           <thead>
             <tr>
-              <th>#</th>
-              <th>Objective </th>
-              <th>Outcome</th>
-              <th>Category </th>
+              
+                <th rowspan="2">STRATEGIC OBJECTIVE</th>
+                <th rowspan="2"  >KEY PERFORMANCE INDICATOR(KPI)</th>
+              <th colspan="4">ADJUSTED CY 2021 COMMITMENT</th>
+              <th rowspan="2">FINAL DOST-1 FY 2021 TARGETS</th>
+             
+          
+              
+            </tr>
+            <tr>
+              
+                <th >Q1</th>
+                <th >Q2</th>
+                <th >Q3</th>
+                <th >Q4</th>
              
           
               
@@ -46,14 +57,7 @@ $(document).ready(function(){
     
     
     
-         var categorylist = new serverData("<?php /*URL in based64*/ echo base64_encode('beans=json/getcategory'); ?>",null);
-   
-       categorylist.done(function(xhr){
-           localStorage.setItem('categorydata',JSON.stringify(xhr))
-           
-       })
-    
-    
+
     
     
     
@@ -96,7 +100,7 @@ $(document).ready(function(){
         
         
                             
-    var d = new serverData("<?php /*URL in based64*/ echo base64_encode('beans=json/getobjective'); ?>",
+    var d = new serverData("<?php /*URL in based64*/ echo base64_encode('beans=json/getindicators_withsubindicator'); ?>",
     
     // use the folowing format for sending data in http request
                                                                         [
@@ -110,25 +114,25 @@ $(document).ready(function(){
     
     
     d.done(function(xhr){
-       var tbody = $('#tbl_objectivelist').find('tbody').empty();
+       var tbody = $('#tbl_indicatorslist').find('tbody').empty();
        
      
        
-        var  item_no = 0;
-    
+        
+    var category ="";
+    var outcome = "";
+    var objective ="";
       
- 
      
-     
-       $.each(xhr,function(i,v){
+       $.each(xhr.data,function(i,v){
            
        
-           item_no++;
-           tbody.append('<tr><td>\n\
-   <input class="form-check-input" type="checkbox" name="objectiveid[]" value="'+v.object_id+'"> \n\
-    '+item_no+'</td><td>'+v.objective_name+'</td><td>'+v.outcome_name+'</td><td>'+v.category_name+'</td></tr>')
+        
+           tbody.append('<tr>\n\
+   <td colspan="7">'+v.cat_name+'</td>\n\
+<td>'+v.outcome_name+'</td><td>'+v.category_name+'</td></tr>')
            
-       })
+       });
        
        
        
