@@ -119,43 +119,67 @@ $(document).ready(function(){
      
        
         
-    var category ="";
-    var outcome = "";
-    var objective ="";
-      
+    var category =null;
+    var outcome = null;
+    var objective =null;
+    var indicator =null;
+    var indicator1 =null;
+    var indicator2 =null;
+      var countme = 0;
+     var rowh = "";
      var row = "";
-     
-     console.log(xhr)
-       $.each(xhr.data,function(i,v){
+   var body = [];
+   var trigger =false;
+    
+       $.each(xhr,function(i,v){
            row = "";
-       if(v.cat_id!=category){
-           row += "<tr><td colspan='7'><b>"+v.cat_name+"</b></td></tr>";
-           row += "<tr><td colspan='7'><i>Goal: "+v.goal+"</i></td></tr>";
+           rowh = "";
+          
+       if(v.cat_id!==category){
+           rowh += "<tr><td colspan='7'><b>"+v.cat_name+"</b></td></tr>";
+           rowh += "<tr><td colspan='7'><i>Goal: "+v.goal+"</i></td></tr>";
           category= v.cat_id;
+          countme--;
            
        }
-       if(v.out_id != outcome){
-            row += "<tr><td colspan='7'><b>"+v.out_name+"</b></td></tr>";
-            outcome = v.out_id
+       if(v.out_id !== outcome){
+            rowh += "<tr><td colspan='7'><b>"+v.out_name+"</b></td></tr>";
+            outcome = v.out_id;
+            countme--;
        }
-       if(v.obj_id != objective){
+       if(v.obj_id == objective){           
            
-            row += "<tr><td colspan='7'><b>"+v.obj_name+"</b></td></tr>";
-             objective = v.obj_id
+             countme++;
+       }else {
+            rowh += "<tr><td ><b>"+v.obj_name+"</b></td></tr>";
+            objective = v.obj_id;
+             countme=0;
        }
         
         
-         row += "<tr><td colspan='7' style='font-style:"+v.style+"'>"+v.indicator_name+"</td></tr>";
         
         
-           tbody.append(row);
+        if(v.id !== indicator){
+         row += "<tr> <td style='font-style:"+v.style+";font-weight:"+v.style+"'>"+v.indicator_name+"</td></tr>";
+         indicator = v.id;
+     }
+        else if(v.sub1_id !== indicator1){
+         row += "<tr> <td style='font-style:"+v.sub1_style+";font-weight:"+v.sub1_style+";margin-left10px'>"+v.sub1_indicator_name+"</td></tr>";
+         indicator1 = v.sub1_sub1_id;
+        }
+        else if(v.sub2_id !== indicator2){
+         row += "<tr> <td style='font-style:"+v.sub2_style+";font-weight:"+v.sub2_style+";padding-left:6px'    >"+v.sub1_indicator_name+"</td></tr>";
+         indicator2= v.sub2_id;
+        }
+        
+           body.push(rowh+row);
         
         
-        
+       
         
        });
        
-       
+       tbody.append(body);
        
        
        
