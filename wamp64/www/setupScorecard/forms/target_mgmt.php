@@ -20,7 +20,7 @@
       <div class="table-responsive">
           
          
-        <table id ="tbl_indicatorslist" class="table table-striped table-sm">
+        <table id ="tbl_indicatorslist" border="1" class="table table-sm">
           <thead>
             <tr>
               
@@ -124,24 +124,31 @@ $(document).ready(function(){
     var objective ="";
       
      var row = "";
+     
+     console.log(xhr)
        $.each(xhr.data,function(i,v){
-           row = "<tr>";
-       if(v.cat_name!=category){
-           row += "<td colspan='7'>"+v.cat_name+"</td>";
-           row += "<td colspan='7'>"+v.cat_name+"</td>";
+           row = "";
+       if(v.cat_id!=category){
+           row += "<tr><td colspan='7'><b>"+v.cat_name+"</b></td></tr>";
+           row += "<tr><td colspan='7'><i>Goal: "+v.goal+"</i></td></tr>";
+          category= v.cat_id;
            
        }
-       if(v.out_name != outcome){
-           
+       if(v.out_id != outcome){
+            row += "<tr><td colspan='7'><b>"+v.out_name+"</b></td></tr>";
+            outcome = v.out_id
        }
-       if(v.obj_name != objective){
+       if(v.obj_id != objective){
            
-           
+            row += "<tr><td colspan='7'><b>"+v.obj_name+"</b></td></tr>";
+             objective = v.obj_id
        }
         
-           tbody.append('<tr>\n\
-   <td colspan="7">'+v.cat_name+'</td>\n\
-<td>'+v.outcome_name+'</td><td>'+v.category_name+'</td></tr>');
+        
+         row += "<tr><td colspan='7' style='font-style:"+v.style+"'>"+v.indicator_name+"</td></tr>";
+        
+        
+           tbody.append(row);
         
         
         
