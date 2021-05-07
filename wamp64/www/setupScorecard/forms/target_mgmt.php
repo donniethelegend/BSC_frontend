@@ -164,11 +164,11 @@ $(document).ready(function(){
          indicator = v.id;
      }
         else if(v.sub1_id !== indicator1){
-         row += "<tr> <td style='font-style:"+v.sub1_style+";font-weight:"+v.sub1_style+";margin-left10px'>"+v.sub1_indicator_name+"</td></tr>";
+         row += "<tr> <td style='font-style:"+v.sub1_style+";font-weight:"+v.sub1_style+"'>&nbsp;&nbsp;&nbsp;"+v.sub1_indicator_name+"</td></tr>";
          indicator1 = v.sub1_sub1_id;
         }
         else if(v.sub2_id !== indicator2){
-         row += "<tr> <td style='font-style:"+v.sub2_style+";font-weight:"+v.sub2_style+";padding-left:6px'    >"+v.sub1_indicator_name+"</td></tr>";
+         row += "<tr> <td style='font-style:"+v.sub2_style+";font-weight:"+v.sub2_style+"'    >&nbsp;&nbsp;&nbsp;&nbsp;"+v.sub1_indicator_name+"</td></tr>";
          indicator2= v.sub2_id;
         }
         
