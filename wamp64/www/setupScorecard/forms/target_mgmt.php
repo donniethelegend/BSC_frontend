@@ -84,6 +84,35 @@ $(document).ready(function(){
 
 
     
+    $(document).on('change','.computable_q',function(){
+        
+var row = $(this).parent('td').parent('tr');        
+var inpt = row.find('input.computable_q');
+var res = 0;
+$.each(inpt,function(i,v){
+ 
+    res  += $(v).val()!=''? parseInt($(v).val()):0;
+    
+    row.find('label').text(res)
+    
+    
+})
+    })
+    $(document).on('change','.computable_p',function(){
+        
+var row = $(this).parent('td').parent('tr');        
+var inpt = row.find('input.computable_p');
+var res = 0;
+$.each(inpt,function(i,v){
+ 
+    res  += $(v).val()!=''? (parseInt($(v).val())/4):0;// devided by 4 for 4 quarters
+    
+    row.find('label').text(res)
+    
+    
+})
+    })
+    
     
     
     
@@ -114,10 +143,11 @@ $(document).ready(function(){
     
     
     d.done(function(xhr){
-       var tbody = $('#tbl_indicatorslist').find('tbody').empty();
+        
+        var tbody = $('#tbl_indicatorslist').find('tbody').html('');
        
      
-       
+
         
     var category =null;
     var outcome = null;
@@ -125,62 +155,205 @@ $(document).ready(function(){
     var indicator =null;
     var indicator1 =null;
     var indicator2 =null;
-      var countme = 0;
-     var rowh = "";
+    var cc =0;
+   
+ 
      var row = "";
-   var body = [];
-   var trigger =false;
+  
+
+
     
        $.each(xhr,function(i,v){
-           row = "";
-           rowh = "";
-          
+        
+         
+         cc++;
        if(v.cat_id!==category){
-           rowh += "<tr><td colspan='7'><b>"+v.cat_name+"</b></td></tr>";
-           rowh += "<tr><td colspan='7'><i>Goal: "+v.goal+"</i></td></tr>";
+           row += "<tr><td colspan=7><b>"+v.cat_name+"</b><br/><i>Goal: "+v.goal+"</i></td></tr>";
           category= v.cat_id;
-          countme--;
+    
            
        }
+       
        if(v.out_id !== outcome){
-            rowh += "<tr><td colspan='7'><b>"+v.out_name+"</b></td></tr>";
+            row += "<tr><td colspan=7 ><b>"+v.out_name+"</b></td></tr>";
             outcome = v.out_id;
-            countme--;
+                 cc=1;
        }
-       if(v.obj_id == objective){           
+       if(v.obj_id !== objective){           
            
-             countme++;
-       }else {
-            rowh += "<tr><td ><b>"+v.obj_name+"</b></td></tr>";
+      
+       
+            row += '<tr ><td rowspan="'+(parseInt(v.countme)+1)+'" style="color:red;max-width:100px;"><b>'+v.obj_name+'</b></td></tr>';
             objective = v.obj_id;
-             countme=0;
+    
+      
        }
         
         
         
         
-        if(v.id !== indicator){
-         row += "<tr> <td style='font-style:"+v.style+";font-weight:"+v.style+"'>"+v.indicator_name+"</td></tr>";
+        if(v.id !== indicator && v.indicator_name !== null){
+            
+            var inp = "";
+            if(v.sub1_id === null){
+                switch(v.type){
+                    
+            case 'quantity':
+                inp ="<td > <input name='q1_q"+v.id+"'  type='number' class='form-control computable_q'/> </td>\n\
+                    <td ><input name='q2_q"+v.id+"' type='number' class='form-control computable_q'/> </td>\n\
+                    <td ><input name='q3_q"+v.id+"' type='number' class='form-control computable_q'/> </td>\n\
+                    <td ><input name='q4_q"+v.id+"' type='number' class='form-control computable_q'/> </td>\n\
+                    <td ><label>auto sum here</label></td>";
+            break;
+            case  'percentage':
+                inp ="<td ><input name='q1_p"+v.id+"' type='number' min=1 max=100 class='form-control computable_p'/> </td>\n\
+                    <td ><input name='q2_p"+v.id+"' type='number' min=1 max=100  class='form-control computable_p'/> </td>\n\
+                    <td ><input name='q3_p"+v.id+"' type='number' min=1 max=100  class='form-control computable_p'/> </td>\n\
+                    <td ><input name='q4_p"+v.id+"' type='number' min=1 max=100  class='form-control computable_p'/> </td>\n\
+                    <td ><label>auto sum here</label></td>";
+                break;
+            case 'rating':
+                  inp ="<td ><input name='q1_r"+v.id+"' type='number' min=1 max=5 class='form-control computable_r'/> </td>\n\
+                    <td ><input name='q2_r"+v.id+"'  type='number' min=1 max=5  class='form-control computable_r'/> </td>\n\
+                    <td ><input name='q3_r"+v.id+"' type='number' min=1 max=5  class='form-control computable_r'/> </td>\n\
+                    <td ><input name='q4_r"+v.id+"' type='number' min=1 max=5  class='form-control computable_r'/> </td>\n\
+                    <td ><label>auto sum here</label></td>";
+                break;
+            case 'boolean':
+                  inp ="<td ><label ><input name='q1_b"+v.id+"'  type='checkbox' value='yes' /> YES</label></td>\n\
+                    <td ><label ><input name='q2_b"+v.id+"' type='checkbox' value='yes' /> YES</label></td>\n\
+                    <td ><label ><input name='q3_b"+v.id+"' type='checkbox' value='yes' /> YES</label></td>\n\
+                    <td ><label ><input name='q4_b"+v.id+"' type='checkbox' value='yes' /> YES</label></td>\n\
+                    <td ><label>auto sum here</label></td>";
+                break;
+                
+    
+    }
+            }else{
+                inp ="<td ></td>\n\
+<td ></td>\n\
+<td ></td>\n\
+<td ></td>\n\
+<td ></td>";
+                
+            }
+            
+         row += "<tr> \n\
+     <td style='font-style:"+v.style+";font-weight:"+v.style+"'>"+v.indicator_name+" <input name='id[]' value='"+v.id+"'  type='number' class='form-control '/></td>"+inp+"</tr>";
          indicator = v.id;
-     }
-        else if(v.sub1_id !== indicator1){
-         row += "<tr> <td style='font-style:"+v.sub1_style+";font-weight:"+v.sub1_style+"'>&nbsp;&nbsp;&nbsp;"+v.sub1_indicator_name+"</td></tr>";
-         indicator1 = v.sub1_sub1_id;
+
+}
+         if(v.sub1_id !== indicator1&& v.sub1_indicator_name !== null){
+               var inp = "";
+            if(v.sub2_id === null){
+             switch(v.sub1_type){
+                    
+            case 'quantity':
+                inp ="<td ><input name='q1_q"+v.sub1_id+"'  type='number' class='form-control computable_q'/> </td>\n\
+                    <td ><input name='q2_q"+v.sub1_id+"' type='number' class='form-control computable_q'/> </td>\n\
+                    <td ><input name='q3_q"+v.sub1_id+"' type='number' class='form-control computable_q'/> </td>\n\
+                    <td ><input name='q4_q"+v.sub1_id+"' type='number' class='form-control computable_q'/> </td>\n\
+                    <td ><label>auto sum here</label></td>";
+            break;
+            case  'percentage':
+                inp ="<td ><input name='q1_p"+v.sub1_id+"' type='number' min=1 max=100 class='form-control computable_p'/> </td>\n\
+                    <td ><input name='q2_p"+v.sub1_id+"' type='number' min=1 max=100  class='form-control computable_p'/> </td>\n\
+                    <td ><input name='q3_p"+v.sub1_id+"' type='number' min=1 max=100  class='form-control computable_p'/> </td>\n\
+                    <td ><input name='q4_p"+v.sub1_id+"' type='number' min=1 max=100  class='form-control computable_p'/> </td>\n\
+                    <td ><label>auto sum here</label></td>";
+                break;
+            case 'rating':
+                  inp ="<td ><input name='q1_r"+v.sub1_id+"' type='number' min=1 max=5 class='form-control computable_r'/> </td>\n\
+                    <td ><input name='q2_r"+v.sub1_id+"'  type='number' min=1 max=5  class='form-control computable_r'/> </td>\n\
+                    <td ><input name='q3_r"+v.sub1_id+"' type='number' min=1 max=5  class='form-control computable_r'/> </td>\n\
+                    <td ><input name='q4_r"+v.sub1_id+"' type='number' min=1 max=5  class='form-control computable_r'/> </td>\n\
+                    <td ><label>auto sum here</label></td>";
+                break;
+            case 'boolean':
+                  inp ="<td ><label ><input name='q1_b"+v.sub1_id+"'  type='checkbox' value='yes' /> YES</label></td>\n\
+                    <td ><label ><input name='q2_b"+v.sub1_id+"' type='checkbox' value='yes' /> YES</label></td>\n\
+                    <td ><label ><input name='q3_b"+v.sub1_id+"' type='checkbox' value='yes' /> YES</label></td>\n\
+                    <td ><label ><input name='q4_b"+v.sub1_id+"' type='checkbox' value='yes' /> YES</label></td>\n\
+                    <td ><label>auto sum here</label></td>";
+                break;
+                
+    
+    }
+                
+            }else{
+                inp ="<td ></td>\n\
+<td ></td>\n\
+<td ></td>\n\
+<td ></td>\n\
+<td ></td>";
+                
+            }
+            
+         row += "<tr> <td style='font-style:"+v.sub1_style+";font-weight:"+v.sub1_style+"'>&nbsp;&nbsp;&nbsp;"+v.sub1_indicator_name+"      <input name='id[]' value='"+v.sub1_id+"'  type='number' class='form-control '/></td>"+inp+"</tr>";
+         indicator1 = v.sub1_id;
+     
         }
-        else if(v.sub2_id !== indicator2){
-         row += "<tr> <td style='font-style:"+v.sub2_style+";font-weight:"+v.sub2_style+"'    >&nbsp;&nbsp;&nbsp;&nbsp;"+v.sub1_indicator_name+"</td></tr>";
+         if(v.sub2_id !== indicator2 && v.sub2_indicator_name !== null){
+             var inp = "";
+             
+             switch(v.sub2_type){
+                    
+            case 'quantity':
+                inp ="<td > <input name='q1_q"+v.id+"'  type='number' class='form-control computable_q'/> </td>\n\
+                    <td ><input name='q2_q"+v.sub2_id+"' type='number' class='form-control computable_q'/> </td>\n\
+                    <td ><input name='q3_q"+v.sub2_id+"' type='number' class='form-control computable_q'/> </td>\n\
+                    <td ><input name='q4_q"+v.sub2_id+"' type='number' class='form-control computable_q'/> </td>\n\
+                    <td ><label>auto sum here</label></td>";
+            break;
+            case  'percentage':
+                inp ="<td ><input name='q1_p"+v.sub2_id+"' type='number' min=1 max=100 class='form-control computable_p'/> </td>\n\
+                    <td ><input name='q2_p"+v.sub2_id+"' type='number' min=1 max=100  class='form-control computable_p'/> </td>\n\
+                    <td ><input name='q3_p"+v.sub2_id+"' type='number' min=1 max=100  class='form-control computable_p'/> </td>\n\
+                    <td ><input name='q4_p"+v.sub2_id+"' type='number' min=1 max=100  class='form-control computable_p'/> </td>\n\
+                    <td ><label>auto sum here</label></td>";
+                break;
+            case 'rating':
+                  inp ="<td ><input name='q1_r"+v.sub2_id+"' type='number' min=1 max=5 class='form-control computable_r'/> </td>\n\
+                    <td ><input name='q2_r"+v.sub2_id+"'  type='number' min=1 max=5  class='form-control computable_r'/> </td>\n\
+                    <td ><input name='q3_r"+v.sub2_id+"' type='number' min=1 max=5  class='form-control computable_r'/> </td>\n\
+                    <td ><input name='q4_r"+v.sub2_id+"' type='number' min=1 max=5  class='form-control computable_r'/> </td>\n\
+                    <td ><label>auto sum here</label></td>";
+                break;
+            case 'boolean':
+                  inp ="<td ><label ><input name='q1_b"+v.sub2_id+"'  type='checkbox' value='yes' /> YES</label></td>\n\
+                    <td ><label ><input name='q2_b"+v.sub2_id+"' type='checkbox' value='yes' /> YES</label></td>\n\
+                    <td ><label ><input name='q3_b"+v.sub2_id+"' type='checkbox' value='yes' /> YES</label></td>\n\
+                    <td ><label ><input name='q4_b"+v.sub2_id+"' type='checkbox' value='yes' /> YES</label></td>\n\
+                    <td ><label>auto sum here</label></td>";
+                break;
+            default:
+                    inp ="<td ></td>\n\
+                    <td ></td>\n\
+                    <td ></td>\n\
+                    <td ></td>\n\
+                    <td ></td>";
+    
+    }
+  
+             
+             
+         row += "<tr> <td style='font-style:"+v.sub2_style+";font-weight:"+v.sub2_style+"'    >&nbsp;&nbsp;&nbsp;&nbsp;"+v.sub2_indicator_name+"<input name='id[]' value='"+v.sub2_id+"'  type='number' class='form-control '/> </td>"+inp+"</tr>";
+    
          indicator2= v.sub2_id;
+       
         }
+       
         
-           body.push(rowh+row);
         
-        
+   
+       
+      
        
         
        });
        
-       tbody.append(body);
-       
+      
+       tbody.html($(row))
        
        
       
