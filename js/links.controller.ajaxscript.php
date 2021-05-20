@@ -60,7 +60,7 @@ myWindow.close();
  
 
 }
-        function quickprint(orientation) {
+        function quickprint(orientation,tableid) {
  
  var css ="";
  if(typeof orientation != "undefined"){
@@ -75,7 +75,7 @@ myWindow.close();
  
 
  
- var h = "<html><head>"+css+"</head><body>"+$("#table_wrapper").html()+"</body></html>";
+ var h = "<html><head>"+css+"</head><body>"+$(tableid).html()+"</body></html>";
  
   
 
