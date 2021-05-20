@@ -130,6 +130,16 @@ $(document).ready(function(){
        var year_s = $('#year_dd').val();
       var quarter = $(this).data('quarter')
       var inp_el = $(this)
+      var inp_val = null;
+     
+      var inp_type = $(this)[0].type
+      if(inp_type === 'checkbox'){
+          inp_val = inp_el.is(':checked')?"YES":"NO";
+          
+      }
+      else{
+       inp_val= $(this).val()
+  }
       
      var save = new serverData("<?php /*URL in based64*/ echo base64_encode('beans=post/update_target'); ?>",
     
@@ -151,13 +161,16 @@ $(document).ready(function(){
                                                                             {
                                                                              name:"quarter",
                                                                              value:quarter
+                                                                            },
+                                                                            {
+                                                                             name:"value",
+                                                                             value:inp_val
                                                                             }
                                                                         ]
                                                                                 );
                                                                         
   save.done(function(xhr){
 
- console.log(xhr)
  
  if(xhr.status){
  inp_el.addClass('is-valid').after('<div class="valid-feedback">Saved</div>');
@@ -312,10 +325,10 @@ $.each(inpt,function(i,v){
                     <td ><label>auto sum here</label></td>";
                 break;
             case 'boolean':
-                  inp ="<td ><label ><input data-quarter ='q1' class='computable_b' type='checkbox' value='yes' /> YES</label></td>\n\
-                    <td ><label ><input data-quarter ='q2' class='computable_b' type='checkbox' value='yes' /> YES</label></td>\n\
-                    <td ><label ><input data-quarter ='q3' class='computable_b' type='checkbox' value='yes' /> YES</label></td>\n\
-                    <td ><label ><input data-quarter ='q4' class='computable_b' type='checkbox' value='yes' /> YES</label></td>\n\
+                  inp ="<td >  <label class='form-check form-switch' ><input data-quarter ='q1' class='form-check-input computable_b' type='checkbox'  /> </label></td>\n\
+                   <td >  <label class='form-check form-switch' ><input data-quarter ='q2' class='form-check-input computable_b' type='checkbox'  /> </label></td>\n\
+                    <td >  <label class='form-check form-switch' ><input data-quarter ='q3' class='form-check-input computable_b' type='checkbox'  /> </label></td>\n\
+                    <td >  <label class='form-check form-switch' ><input data-quarter ='q4' class='form-check-input computable_b' type='checkbox'  /> </label></td>\n\
                     <td ><label>auto sum here</label></td>";
                 break;
                 
@@ -331,7 +344,7 @@ $.each(inpt,function(i,v){
             }
             
          row += "<tr> \n\
-     <td style='font-style:"+v.style+";font-weight:"+v.style+"'>"+v.indicator_name+" <input name='id' value='"+v.id+"'  type='number' class='form-control '/></td>"+inp+"</tr>";
+     <td style='font-style:"+v.style+";font-weight:"+v.style+"'>"+v.indicator_name+" <input name='id' value='"+v.id+"'  type='number' class='visually-hidden '/></td>"+inp+"</tr>";
          indicator = v.id;
 
 }
@@ -341,7 +354,7 @@ $.each(inpt,function(i,v){
              switch(v.sub1_type){
                     
             case 'quantity':
-                inp ="<td > <input data-quarter ='q1'  type='number' class='form-control computable_q'/> </td>\n\
+                inp ="<td > <input data-quarter ='q1'  type='number' class='form-control  computable_q'/> </td>\n\
                     <td ><input data-quarter ='q2' type='number' class='form-control computable_q'/> </td>\n\
                     <td ><input data-quarter ='q3' type='number' class='form-control computable_q'/> </td>\n\
                     <td ><input data-quarter ='q4' type='number' class='form-control computable_q'/> </td>\n\
@@ -362,12 +375,13 @@ $.each(inpt,function(i,v){
                     <td ><label>auto sum here</label></td>";
                 break;
             case 'boolean':
-                  inp ="<td ><label ><input data-quarter ='q1' class='computable_b' type='checkbox' value='yes' /> YES</label></td>\n\
-                    <td ><label ><input data-quarter ='q2' class='computable_b' type='checkbox' value='yes' /> YES</label></td>\n\
-                    <td ><label ><input data-quarter ='q3' class='computable_b' type='checkbox' value='yes' /> YES</label></td>\n\
-                    <td ><label ><input data-quarter ='q4' class='computable_b' type='checkbox' value='yes' /> YES</label></td>\n\
+                  inp ="<td >  <label class='form-check form-switch' ><input data-quarter ='q1' class='form-check-input computable_b' type='checkbox'  /> </label></td>\n\
+                   <td >  <label class='form-check form-switch' ><input data-quarter ='q2' class='form-check-input computable_b' type='checkbox'  /> </label></td>\n\
+                    <td >  <label class='form-check form-switch' ><input data-quarter ='q3' class='form-check-input computable_b' type='checkbox'  /> </label></td>\n\
+                    <td >  <label class='form-check form-switch' ><input data-quarter ='q4' class='form-check-input computable_b' type='checkbox'  /> </label></td>\n\
                     <td ><label>auto sum here</label></td>";
                 break;
+                
                 
     
     }
@@ -381,7 +395,7 @@ $.each(inpt,function(i,v){
                 
             }
             
-         row += "<tr> <td style='font-style:"+v.sub1_style+";font-weight:"+v.sub1_style+"'>&nbsp;&nbsp;&nbsp;"+v.sub1_indicator_name+"      <input name='id[]' value='"+v.sub1_id+"'  type='number' class='form-control '/></td>"+inp+"</tr>";
+         row += "<tr> <td style='font-style:"+v.sub1_style+";font-weight:"+v.sub1_style+"'>&nbsp;&nbsp;&nbsp;"+v.sub1_indicator_name+"      <input name='id' value='"+v.sub1_id+"'  type='number' class='visually-hidden '/></td>"+inp+"</tr>";
          indicator1 = v.sub1_id;
      
         }
@@ -390,8 +404,8 @@ $.each(inpt,function(i,v){
              
              switch(v.sub2_type){
                     
-            case 'quantity':
-                inp ="<td > <input data-quarter ='q1'  type='number' class='form-control computable_q'/> </td>\n\
+           case 'quantity':
+                inp ="<td > <input data-quarter ='q1'  type='number' class='form-control  computable_q'/> </td>\n\
                     <td ><input data-quarter ='q2' type='number' class='form-control computable_q'/> </td>\n\
                     <td ><input data-quarter ='q3' type='number' class='form-control computable_q'/> </td>\n\
                     <td ><input data-quarter ='q4' type='number' class='form-control computable_q'/> </td>\n\
@@ -412,12 +426,13 @@ $.each(inpt,function(i,v){
                     <td ><label>auto sum here</label></td>";
                 break;
             case 'boolean':
-                  inp ="<td ><label ><input data-quarter ='q1' class='computable_b' type='checkbox' value='yes' /> YES</label></td>\n\
-                    <td ><label ><input data-quarter ='q2' class='computable_b' type='checkbox' value='yes' /> YES</label></td>\n\
-                    <td ><label ><input data-quarter ='q3' class='computable_b' type='checkbox' value='yes' /> YES</label></td>\n\
-                    <td ><label ><input data-quarter ='q4' class='computable_b' type='checkbox' value='yes' /> YES</label></td>\n\
+                  inp ="<td >  <label class='form-check form-switch' ><input data-quarter ='q1' class='form-check-input computable_b' type='checkbox'  /> </label></td>\n\
+                   <td >  <label class='form-check form-switch' ><input data-quarter ='q2' class='form-check-input computable_b' type='checkbox'  /> </label></td>\n\
+                    <td >  <label class='form-check form-switch' ><input data-quarter ='q3' class='form-check-input computable_b' type='checkbox'  /> </label></td>\n\
+                    <td >  <label class='form-check form-switch' ><input data-quarter ='q4' class='form-check-input computable_b' type='checkbox'  /> </label></td>\n\
                     <td ><label>auto sum here</label></td>";
                 break;
+                
             default:
                     inp ="<td ></td>\n\
                     <td ></td>\n\
@@ -429,7 +444,7 @@ $.each(inpt,function(i,v){
   
              
              
-         row += "<tr> <td style='font-style:"+v.sub2_style+";font-weight:"+v.sub2_style+"'    >&nbsp;&nbsp;&nbsp;&nbsp;"+v.sub2_indicator_name+"<input name='id[]' value='"+v.sub2_id+"'  type='number' class='form-control '/> </td>"+inp+"</tr>";
+         row += "<tr> <td style='font-style:"+v.sub2_style+";font-weight:"+v.sub2_style+"'    >&nbsp;&nbsp;&nbsp;&nbsp;"+v.sub2_indicator_name+"<input name='id' value='"+v.sub2_id+"'  type='number' class='visually-hidden '/> </td>"+inp+"</tr>";
     
          indicator2= v.sub2_id;
        
