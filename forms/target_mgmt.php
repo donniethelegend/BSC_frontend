@@ -1,12 +1,30 @@
 <?php    if ($_SESSION[base64_encode("role")] == base64_encode('administrator')||$_SESSION[base64_encode("role")] == base64_encode('moderator') ){ ?>
       <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2">Objective Management</h1>
+        <h1 class="h2">Target/Commitment Management</h1>
         <div class="btn-toolbar mb-2 mb-md-0">
-          <div class="btn-group me-2">
+          
               
-            
-       
+             <div class="col-md-6 form-floating">
+ 
+    <select id="province_dd" class="form-control">
+                  
+              </select>
+              
+              <label for="province_dd">Select Province:</label>
+  </div>
+         <div class="form-floating col-md-6 ">
+              
+              <select id="year_dd" class="form-control">
+                  
+              </select>
+               <label for="year_dd">Select Year:</label>
           </div>
+          
+        
+              
+              <button class="form-control btn btn-success loadcontent" > Load Content</button>
+        
+        
       
         </div>
       </div>
@@ -14,21 +32,11 @@
  
  
       <div class="table-responsive">
-          <div class="form-floating mb-3">
+         
+         
+        
+        
               
-              <select id="province_dd" class="form-control">
-                  
-              </select>
-              
-              <label for="province_dd">Select Province:</label>
-          </div>
-          <div class="form-floating mb-3">
-              
-              <select id="year_dd" class="form-control">
-                  
-              </select>
-               <label for="year_dd">Select Year:</label>
-          </div>
          
         <table id ="tbl_indicatorslist" border="1" class="table table-sm">
           <thead>
@@ -64,6 +72,12 @@
    
 
 $(document).ready(function(){
+    
+      $(document).on('click', '.loadcontent',function(){
+     
+        loadTable();
+    })
+    
     
      var province_list    = new serverData("<?php /*URL in based64*/ echo base64_encode('beans=json/getprovinces'); ?>"  );// 1st parameter is the beans name; 2nd parameter is the data, in serializedArray format
      var year_list    = new serverData("<?php /*URL in based64*/ echo base64_encode('beans=json/getyear_from_deadlines'); ?>"  );// 1st parameter is the beans name; 2nd parameter is the data, in serializedArray format
@@ -210,16 +224,30 @@ var inpt = row.find('input.computable_p');
 var res = 0;
 $.each(inpt,function(i,v){
  
-    res  += $(v).val()!=''? (parseInt($(v).val())/4):0;// devided by 4 for 4 quarters
+    res  += $(v).val()!=''? parseInt($(v).val()):0;// devided by 4 for 4 quarters
     
-    row.find('label').text(res)
+    row.find('label').text(res+"%")
+    
+    
+})
+    })
+    $(document).on('change','.computable_r',function(){
+        
+var row = $(this).parent('td').parent('tr');        
+var inpt = row.find('input.computable_r');
+var res = 0;
+$.each(inpt,function(i,v){
+ 
+    res  += $(v).val()!=''? parseInt($(v).val()):0;// devided by 4 for 4 quarters
+    
+    row.find('label').text(res/4 +"Ave")
     
     
 })
     })
     
     
-    
+  
     
     function loadTable(){
       
@@ -232,16 +260,22 @@ $.each(inpt,function(i,v){
             
         }
         
-        
+          var prov_id = $.cookie('province_selection');
+          var year_s = $.cookie('year_selection');
+       
                             
-    var d = new serverData("<?php /*URL in based64*/ echo base64_encode('beans=json/getindicators_withsubindicator'); ?>",
+    var d = new serverData("<?php /*URL in based64*/ echo base64_encode('beans=json/getindicators_with_target_commitment'); ?>",
     
     // use the folowing format for sending data in http request
                                                                         [
                                                                           
                                                                             {
-                                                                             name:"search",
-                                                                             value:search
+                                                                             name:"province",
+                                                                             value:prov_id
+                                                                            },
+                                                                            {
+                                                                             name:"year",
+                                                                             value:year_s
                                                                             }
                                                                         ]
                                                                                 );// 1st parameter is the beans name; 2nd parameter is the data, in serializedArray format
@@ -273,14 +307,14 @@ $.each(inpt,function(i,v){
          
          cc++;
        if(v.cat_id!==category){
-           row += "<tr><td colspan=7><b>"+v.cat_name+"</b><br/><i>Goal: "+v.goal+"</i></td></tr>";
+           row += "<tr><td colspan=7  style='background-color:#a8b9e3'><b>"+v.cat_name+"</b><br/><i>Goal: "+v.goal+"</i></td></tr>";
           category= v.cat_id;
     
            
        }
        
        if(v.out_id !== outcome){
-            row += "<tr><td colspan=7 ><b>"+v.out_name+"</b></td></tr>";
+            row += "<tr><td colspan=7 style='background-color:#aeb0b5;' ><b>"+v.out_name+"</b></td></tr>";
             outcome = v.out_id;
                  cc=1;
        }
@@ -288,48 +322,57 @@ $.each(inpt,function(i,v){
            
       
        
-            row += '<tr ><td rowspan="'+(parseInt(v.countme)+1)+'" style="color:red;max-width:100px;"><b>'+v.obj_name+'</b></td></tr>';
+            row += '<tr ><td rowspan="'+(parseInt(v.countme)+1)+'" style="background-color:#b9bdc4;max-width:100px;"><b>'+v.obj_name+'</b></td></tr>';
             objective = v.obj_id;
     
       
        }
         
-        
-        
-        
+    
         if(v.id !== indicator && v.indicator_name !== null){
             
             var inp = "";
+            
             if(v.sub1_id === null){
+                
                 switch(v.type){
                     
             case 'quantity':
-                inp ="<td > <input data-quarter ='q1'  type='number' class='form-control  computable_q'/> </td>\n\
-                    <td ><input data-quarter ='q2' type='number' class='form-control computable_q'/> </td>\n\
-                    <td ><input data-quarter ='q3' type='number' class='form-control computable_q'/> </td>\n\
-                    <td ><input data-quarter ='q4' type='number' class='form-control computable_q'/> </td>\n\
-                    <td ><label>auto sum here</label></td>";
+                inp ="<td > <input data-quarter ='q1'  type='number' class='form-control  computable_q' value='"+v.q1target+"' /></td>\n\
+                    <td ><input data-quarter ='q2' type='number' class='form-control computable_q' value='"+v.q2target+"'  /> </td>\n\
+                    <td ><input data-quarter ='q3' type='number' class='form-control computable_q' value='"+v.q3target+"' /> </td>\n\
+                    <td ><input data-quarter ='q4' type='number' class='form-control computable_q' value='"+v.q4target+"' /> </td>\n\
+                    <td ><label> "+((v.q1target!=null?parseInt(v.q1target):0)+
+                                (v.q2target!=null?parseInt(v.q2target):0)+
+                                (v.q3target!=null?parseInt(v.q3target):0)+
+                                (v.q4target!=null?parseInt(v.q4target):0))+" </label></td>";
             break;
             case  'percentage':
-                inp ="<td ><input data-quarter ='q1' type='number' min=1 max=100 class='form-control computable_p'/> </td>\n\
-                    <td ><input data-quarter ='q2' type='number' min=1 max=100  class='form-control computable_p'/> </td>\n\
-                    <td ><input data-quarter ='q3' type='number' min=1 max=100  class='form-control computable_p'/> </td>\n\
-                    <td ><input data-quarter ='q4' type='number' min=1 max=100  class='form-control computable_p'/> </td>\n\
-                    <td ><label>auto sum here</label></td>";
+                inp ="<td ><input data-quarter ='q1' type='number' min=1 max=100 class='form-control computable_p' value='"+v.q1target+"' /> </td>\n\
+                    <td ><input data-quarter ='q2' type='number' min=1 max=100  class='form-control computable_p' value='"+v.q2target+"' /> </td>\n\
+                    <td ><input data-quarter ='q3' type='number' min=1 max=100  class='form-control computable_p' value='"+v.q3target+"' /> </td>\n\
+                    <td ><input data-quarter ='q4' type='number' min=1 max=100  class='form-control computable_p' value='"+v.q4target+"' /> </td>\n\
+                    <td ><label> "+((v.q1target!=null?parseInt(v.q1target):0)+
+                                (v.q2target!=null?parseInt(v.q2target):0)+
+                                (v.q3target!=null?parseInt(v.q3target):0)+
+                                (v.q4target!=null?parseInt(v.q4target):0))+"%</label></td>";
                 break;
             case 'rating':
-                  inp ="<td ><input data-quarter ='q1' type='number' min=1 max=5 class='form-control computable_r'/> </td>\n\
-                    <td ><input data-quarter ='q2'  type='number' min=1 max=5  class='form-control computable_r'/> </td>\n\
-                    <td ><input data-quarter ='q3' type='number' min=1 max=5  class='form-control computable_r'/> </td>\n\
-                    <td ><input data-quarter ='q4' type='number' min=1 max=5  class='form-control computable_r'/> </td>\n\
-                    <td ><label>auto sum here</label></td>";
+                  inp ="<td ><input data-quarter ='q1' type='number' min=1 max=5 class='form-control computable_r'  value='"+v.q1target+"' /> </td>\n\
+                    <td ><input data-quarter ='q2'  type='number' min=1 max=5  class='form-control computable_r' value='"+v.q2target+"' /> </td>\n\
+                    <td ><input data-quarter ='q3' type='number' min=1 max=5  class='form-control computable_r' value='"+v.q3target+"' /> </td>\n\
+                    <td ><input data-quarter ='q4' type='number' min=1 max=5  class='form-control computable_r' value='"+v.q4target+"' /> </td>\n\
+                    <td ><label> "+(((v.q1target!=null?parseInt(v.q1target):0)+
+                                (v.q2target!=null?parseInt(v.q2target):0)+
+                                (v.q3target!=null?parseInt(v.q3target):0)+
+                                (v.q4target!=null?parseInt(v.q4target):0))/4)+" Ave</label></td>";
                 break;
             case 'boolean':
-                  inp ="<td >  <label class='form-check form-switch' ><input data-quarter ='q1' class='form-check-input computable_b' type='checkbox'  /> </label></td>\n\
-                   <td >  <label class='form-check form-switch' ><input data-quarter ='q2' class='form-check-input computable_b' type='checkbox'  /> </label></td>\n\
-                    <td >  <label class='form-check form-switch' ><input data-quarter ='q3' class='form-check-input computable_b' type='checkbox'  /> </label></td>\n\
-                    <td >  <label class='form-check form-switch' ><input data-quarter ='q4' class='form-check-input computable_b' type='checkbox'  /> </label></td>\n\
-                    <td ><label>auto sum here</label></td>";
+                  inp ="<td >  <label class='form-check form-switch' ><input data-quarter ='q1' class='form-check-input computable_b' type='checkbox' "+(v.q1target=="YES"?"checked":"")+"  /> </label></td>\n\
+                   <td >  <label class='form-check form-switch' ><input data-quarter ='q2' class='form-check-input computable_b' type='checkbox' "+(v.q2target=="YES"?"checked":"")+" /> </label></td>\n\
+                    <td >  <label class='form-check form-switch' ><input data-quarter ='q3' class='form-check-input computable_b' type='checkbox' "+(v.q3target=="YES"?"checked":"")+" /> </label></td>\n\
+                    <td >  <label class='form-check form-switch' ><input data-quarter ='q4' class='form-check-input computable_b' type='checkbox' "+(v.q4target=="YES"?"checked":"")+" /> </label></td>\n\
+                    <td ><label>-</label></td>";
                 break;
                 
     
@@ -354,32 +397,41 @@ $.each(inpt,function(i,v){
              switch(v.sub1_type){
                     
             case 'quantity':
-                inp ="<td > <input data-quarter ='q1'  type='number' class='form-control  computable_q'/> </td>\n\
-                    <td ><input data-quarter ='q2' type='number' class='form-control computable_q'/> </td>\n\
-                    <td ><input data-quarter ='q3' type='number' class='form-control computable_q'/> </td>\n\
-                    <td ><input data-quarter ='q4' type='number' class='form-control computable_q'/> </td>\n\
-                    <td ><label>auto sum here</label></td>";
+                inp ="<td > <input data-quarter ='q1'  type='number' class='form-control  computable_q' value='"+v.sub1_q1target+"' /></td>\n\
+                    <td ><input data-quarter ='q2' type='number' class='form-control computable_q' value='"+v.sub1_q2target+"'  /> </td>\n\
+                    <td ><input data-quarter ='q3' type='number' class='form-control computable_q' value='"+v.sub1_q3target+"' /> </td>\n\
+                    <td ><input data-quarter ='q4' type='number' class='form-control computable_q' value='"+v.sub1_q4target+"' /> </td>\n\
+                    <td ><label> "+((v.sub1_q1target!=null?parseInt(v.sub1_q1target):0)+
+                                (v.sub1_q2target!=null?parseInt(v.sub1_q2target):0)+
+                                (v.sub1_q3target!=null?parseInt(v.sub1_q3target):0)+
+                                (v.sub1_q4target!=null?parseInt(v.sub1_q4target):0))+" </label></td>";
             break;
             case  'percentage':
-                inp ="<td ><input data-quarter ='q1' type='number' min=1 max=100 class='form-control computable_p'/> </td>\n\
-                    <td ><input data-quarter ='q2' type='number' min=1 max=100  class='form-control computable_p'/> </td>\n\
-                    <td ><input data-quarter ='q3' type='number' min=1 max=100  class='form-control computable_p'/> </td>\n\
-                    <td ><input data-quarter ='q4' type='number' min=1 max=100  class='form-control computable_p'/> </td>\n\
-                    <td ><label>auto sum here</label></td>";
+                inp ="<td ><input data-quarter ='q1' type='number' min=1 max=100 class='form-control computable_p' value='"+v.sub1_q1target+"' /> </td>\n\
+                    <td ><input data-quarter ='q2' type='number' min=1 max=100  class='form-control computable_p' value='"+v.sub1_q2target+"' /> </td>\n\
+                    <td ><input data-quarter ='q3' type='number' min=1 max=100  class='form-control computable_p' value='"+v.sub1_q3target+"' /> </td>\n\
+                    <td ><input data-quarter ='q4' type='number' min=1 max=100  class='form-control computable_p' value='"+v.sub1_q4target+"' /> </td>\n\
+                    <td ><label> "+((v.sub1_q1target!=null?parseInt(v.sub1_q1target):0)+
+                                (v.sub1_q2target!=null?parseInt(v.sub1_q2target):0)+
+                                (v.sub1_q3target!=null?parseInt(v.sub1_q3target):0)+
+                                (v.sub1_q4target!=null?parseInt(v.sub1_q4target):0))+"%</label></td>";
                 break;
             case 'rating':
-                  inp ="<td ><input data-quarter ='q1' type='number' min=1 max=5 class='form-control computable_r'/> </td>\n\
-                    <td ><input data-quarter ='q2'  type='number' min=1 max=5  class='form-control computable_r'/> </td>\n\
-                    <td ><input data-quarter ='q3' type='number' min=1 max=5  class='form-control computable_r'/> </td>\n\
-                    <td ><input data-quarter ='q4' type='number' min=1 max=5  class='form-control computable_r'/> </td>\n\
-                    <td ><label>auto sum here</label></td>";
+                  inp ="<td ><input data-quarter ='q1' type='number' min=1 max=5 class='form-control computable_r'  value='"+v.sub1_q1target+"' /> </td>\n\
+                    <td ><input data-quarter ='q2'  type='number' min=1 max=5  class='form-control computable_r' value='"+v.sub1_q2target+"' /> </td>\n\
+                    <td ><input data-quarter ='q3' type='number' min=1 max=5  class='form-control computable_r' value='"+v.sub1_q3target+"' /> </td>\n\
+                    <td ><input data-quarter ='q4' type='number' min=1 max=5  class='form-control computable_r' value='"+v.sub1_q4target+"' /> </td>\n\
+                    <td ><label> "+(((v.sub1_q1target!=null?parseInt(v.sub1_q1target):0)+
+                                (v.sub1_q2target!=null?parseInt(v.sub1_q2target):0)+
+                                (v.sub1_q3target!=null?parseInt(v.sub1_q3target):0)+
+                                (v.sub1_q4target!=null?parseInt(v.sub1_q4target):0))/4)+" Ave</label></td>";
                 break;
             case 'boolean':
-                  inp ="<td >  <label class='form-check form-switch' ><input data-quarter ='q1' class='form-check-input computable_b' type='checkbox'  /> </label></td>\n\
-                   <td >  <label class='form-check form-switch' ><input data-quarter ='q2' class='form-check-input computable_b' type='checkbox'  /> </label></td>\n\
-                    <td >  <label class='form-check form-switch' ><input data-quarter ='q3' class='form-check-input computable_b' type='checkbox'  /> </label></td>\n\
-                    <td >  <label class='form-check form-switch' ><input data-quarter ='q4' class='form-check-input computable_b' type='checkbox'  /> </label></td>\n\
-                    <td ><label>auto sum here</label></td>";
+                  inp ="<td >  <label class='form-check form-switch' ><input data-quarter ='q1' class='form-check-input computable_b' type='checkbox' "+(v.sub1_q1target=="YES"?"checked":"")+"  /> </label></td>\n\
+                   <td >  <label class='form-check form-switch' ><input data-quarter ='q2' class='form-check-input computable_b' type='checkbox' "+(v.sub1_q2target=="YES"?"checked":"")+" /> </label></td>\n\
+                    <td >  <label class='form-check form-switch' ><input data-quarter ='q3' class='form-check-input computable_b' type='checkbox' "+(v.sub1_q3target=="YES"?"checked":"")+" /> </label></td>\n\
+                    <td >  <label class='form-check form-switch' ><input data-quarter ='q4' class='form-check-input computable_b' type='checkbox' "+(v.sub1_q4target=="YES"?"checked":"")+" /> </label></td>\n\
+                    <td ><label>-</label></td>";
                 break;
                 
                 
@@ -402,35 +454,44 @@ $.each(inpt,function(i,v){
          if(v.sub2_id !== indicator2 && v.sub2_indicator_name !== null){
              var inp = "";
              
-             switch(v.sub2_type){
+             switch(v.sub2_type){//ssdsdsd
                     
            case 'quantity':
-                inp ="<td > <input data-quarter ='q1'  type='number' class='form-control  computable_q'/> </td>\n\
-                    <td ><input data-quarter ='q2' type='number' class='form-control computable_q'/> </td>\n\
-                    <td ><input data-quarter ='q3' type='number' class='form-control computable_q'/> </td>\n\
-                    <td ><input data-quarter ='q4' type='number' class='form-control computable_q'/> </td>\n\
-                    <td ><label>auto sum here</label></td>";
+                inp ="<td > <input data-quarter ='q1'  type='number' class='form-control  computable_q' value='"+v.sub2_q1target+"' /></td>\n\
+                    <td ><input data-quarter ='q2' type='number' class='form-control computable_q' value='"+v.sub2_q2target+"'  /> </td>\n\
+                    <td ><input data-quarter ='q3' type='number' class='form-control computable_q' value='"+v.sub2_q3target+"' /> </td>\n\
+                    <td ><input data-quarter ='q4' type='number' class='form-control computable_q' value='"+v.sub2_q4target+"' /> </td>\n\
+                    <td ><label> "+((v.sub2_q1target!=null?parseInt(v.sub2_q1target):0)+
+                                (v.sub2_q2target!=null?parseInt(v.sub2_q2target):0)+
+                                (v.sub2_q3target!=null?parseInt(v.sub2_q3target):0)+
+                                (v.sub2_q4target!=null?parseInt(v.sub2_q4target):0))+" </label></td>";
             break;
             case  'percentage':
-                inp ="<td ><input data-quarter ='q1' type='number' min=1 max=100 class='form-control computable_p'/> </td>\n\
-                    <td ><input data-quarter ='q2' type='number' min=1 max=100  class='form-control computable_p'/> </td>\n\
-                    <td ><input data-quarter ='q3' type='number' min=1 max=100  class='form-control computable_p'/> </td>\n\
-                    <td ><input data-quarter ='q4' type='number' min=1 max=100  class='form-control computable_p'/> </td>\n\
-                    <td ><label>auto sum here</label></td>";
+                inp ="<td ><input data-quarter ='q1' type='number' min=1 max=100 class='form-control computable_p' value='"+v.sub2_q1target+"' /> </td>\n\
+                    <td ><input data-quarter ='q2' type='number' min=1 max=100  class='form-control computable_p' value='"+v.sub2_q2target+"' /> </td>\n\
+                    <td ><input data-quarter ='q3' type='number' min=1 max=100  class='form-control computable_p' value='"+v.sub2_q3target+"' /> </td>\n\
+                    <td ><input data-quarter ='q4' type='number' min=1 max=100  class='form-control computable_p' value='"+v.sub2_q4target+"' /> </td>\n\
+                    <td ><label> "+((v.sub2_q1target!=null?parseInt(v.sub2_q1target):0)+
+                                (v.sub2_q2target!=null?parseInt(v.sub2_q2target):0)+
+                                (v.sub2_q3target!=null?parseInt(v.sub2_q3target):0)+
+                                (v.sub2_q4target!=null?parseInt(v.sub2_q4target):0))+"%</label></td>";
                 break;
             case 'rating':
-                  inp ="<td ><input data-quarter ='q1' type='number' min=1 max=5 class='form-control computable_r'/> </td>\n\
-                    <td ><input data-quarter ='q2'  type='number' min=1 max=5  class='form-control computable_r'/> </td>\n\
-                    <td ><input data-quarter ='q3' type='number' min=1 max=5  class='form-control computable_r'/> </td>\n\
-                    <td ><input data-quarter ='q4' type='number' min=1 max=5  class='form-control computable_r'/> </td>\n\
-                    <td ><label>auto sum here</label></td>";
+                  inp ="<td ><input data-quarter ='q1' type='number' min=1 max=5 class='form-control computable_r'  value='"+v.sub2_q1target+"' /> </td>\n\
+                    <td ><input data-quarter ='q2'  type='number' min=1 max=5  class='form-control computable_r' value='"+v.sub2_q2target+"' /> </td>\n\
+                    <td ><input data-quarter ='q3' type='number' min=1 max=5  class='form-control computable_r' value='"+v.sub2_q3target+"' /> </td>\n\
+                    <td ><input data-quarter ='q4' type='number' min=1 max=5  class='form-control computable_r' value='"+v.sub2_q4target+"' /> </td>\n\
+                    <td ><label> "+(((v.sub2_q1target!=null?parseInt(v.sub2_q1target):0)+
+                                (v.sub2_q2target!=null?parseInt(v.sub2_q2target):0)+
+                                (v.sub2_q3target!=null?parseInt(v.sub2_q3target):0)+
+                                (v.sub2_q4target!=null?parseInt(v.sub2_q4target):0))/4)+" Ave</label></td>";
                 break;
             case 'boolean':
-                  inp ="<td >  <label class='form-check form-switch' ><input data-quarter ='q1' class='form-check-input computable_b' type='checkbox'  /> </label></td>\n\
-                   <td >  <label class='form-check form-switch' ><input data-quarter ='q2' class='form-check-input computable_b' type='checkbox'  /> </label></td>\n\
-                    <td >  <label class='form-check form-switch' ><input data-quarter ='q3' class='form-check-input computable_b' type='checkbox'  /> </label></td>\n\
-                    <td >  <label class='form-check form-switch' ><input data-quarter ='q4' class='form-check-input computable_b' type='checkbox'  /> </label></td>\n\
-                    <td ><label>auto sum here</label></td>";
+                  inp ="<td >  <label class='form-check form-switch' ><input data-quarter ='q1' class='form-check-input computable_b' type='checkbox' "+(v.sub2_q1target=="YES"?"checked":"")+"  /> </label></td>\n\
+                   <td >  <label class='form-check form-switch' ><input data-quarter ='q2' class='form-check-input computable_b' type='checkbox' "+(v.sub2_q2target=="YES"?"checked":"")+" /> </label></td>\n\
+                    <td >  <label class='form-check form-switch' ><input data-quarter ='q3' class='form-check-input computable_b' type='checkbox' "+(v.sub2_q3target=="YES"?"checked":"")+" /> </label></td>\n\
+                    <td >  <label class='form-check form-switch' ><input data-quarter ='q4' class='form-check-input computable_b' type='checkbox' "+(v.sub2_q4target=="YES"?"checked":"")+" /> </label></td>\n\
+                    <td ><label>-</label></td>";
                 break;
                 
             default:
