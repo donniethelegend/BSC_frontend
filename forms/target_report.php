@@ -40,24 +40,24 @@
         
               
          
-        <table id ="tbl_indicatorslist" style="border-collapse:collapse;border-spacing:0" border="1" class="table table-sm">
+        <table id ="tbl_indicatorslist" style="border-collapse:collapse;width:100%; font-family:Arial, sans-serif;font-size:11px; white-space:normal;"   class="table table-sm">
           <thead>
             <tr>
               
-                <th rowspan="2">STRATEGIC OBJECTIVE</th>
-                <th rowspan="2"  >KEY PERFORMANCE INDICATOR(KPI)</th>
-              <th colspan="4">ADJUSTED CY 2021 COMMITMENT</th>
-              <th rowspan="2">FINAL DOST-1 FY 2021 TARGETS</th>
+                <th style='border:solid;border-width: thin;border-style:solid;' rowspan="2">STRATEGIC OBJECTIVE</th>
+                <th style='border:solid;border-width: thin;border-style:solid;' rowspan="2" colspan="2"  >KEY PERFORMANCE INDICATOR(KPI)</th>
+              <th style='border:solid;border-width: thin;border-style:solid;' colspan="4">ADJUSTED CY 2021 COMMITMENT</th>
+              <th style='border:solid;border-width: thin;border-style:solid;max-width:100px;' rowspan="2">FINAL DOST-1 FY 2021 TARGETS</th>
              
           
               
             </tr>
             <tr>
               
-                <th >Q1</th>
-                <th >Q2</th>
-                <th >Q3</th>
-                <th >Q4</th>
+                <th style='border:solid;border-width: thin;border-style:solid;' >Q1</th>
+                <th style='border:solid;border-width: thin;border-style:solid;' >Q2</th>
+                <th style='border:solid;border-width: thin;border-style:solid;' >Q3</th>
+                <th style='border:solid;border-width: thin;border-style:solid;' >Q4</th>
              
           
               
@@ -66,6 +66,7 @@
           <tbody>
          
           </tbody>
+          <tfoot></tfoot>
         </table>
          
       </div>
@@ -161,6 +162,7 @@ $(document).ready(function(){
     d.done(function(xhr){
         
         var tbody = $('#tbl_indicatorslist').find('tbody').html('');
+        var tfoot = $('#tbl_indicatorslist').find('tfoot').html('');
        
      
 
@@ -184,14 +186,14 @@ $(document).ready(function(){
          
          cc++;
        if(v.cat_id!==category){
-           row += "<tr><td colspan=7  ><b>"+v.cat_name+"</b><br/><i>Goal: "+v.goal+"</i></td></tr>";
+           row += "<tr><td colspan=8 style='border:solid;border-width: thin;border-style:solid;'  ><b>"+v.cat_name+"</b><br/><i>Goal: "+v.goal+"</i></td></tr>";
           category= v.cat_id;
     
            
        }
        
        if(v.out_id !== outcome){
-            row += "<tr><td colspan=7  ><b>"+v.out_name+"</b></td></tr>";
+            row += "<tr><td colspan=8 style='border:solid;border-width: thin;border-style:solid;'  ><b>"+v.out_name+"</b></td></tr>";
             outcome = v.out_id;
                  cc=1;
        }
@@ -199,7 +201,7 @@ $(document).ready(function(){
            
       
        
-            row += '<tr ><td rowspan="'+(parseInt(v.countme)+1)+'" style="max-width:100px;"><b>'+v.obj_name+'</b></td></tr>';
+            row += '<tr ><td rowspan="'+(parseInt(v.countme)+1)+'" style="border:solid;border-width: thin;border-style:solid;max-width:120px;"><i>'+v.obj_name+'</p></b></td>'+(parseInt(v.countme)>=1?(parseInt(v.countme)<=5?"<td style='border:solid;border-width: thin;border-style:solid;' colspan=7>":""):"")+'</tr>';
             objective = v.obj_id;
     
       
@@ -215,61 +217,61 @@ $(document).ready(function(){
                 switch(v.type){
                     
             case 'quantity':
-                inp ="<td > "+(v.q1target!=null?v.q1target:'-')+" </td>\n\
-                    <td >"+(v.q2target!=null?v.q2target:'-')+"   </td>\n\
-                    <td >"+(v.q3target!=null?v.q3target:'-')+" </td>\n\
-                    <td >"+(v.q4target!=null?v.q4target:'-')+"  </td>\n\
-                    <td >"+((v.q1target!=null?parseInt(v.q1target):0)+
+                inp ="<td style='border:solid;border-width: thin;border-style:solid;' > "+(v.q1target!=null?v.q1target:'-')+" </td>\n\
+                    <td style='border:solid;border-width: thin;border-style:solid;' >"+(v.q2target!=null?v.q2target:'-')+"   </td>\n\
+                    <td style='border:solid;border-width: thin;border-style:solid;' >"+(v.q3target!=null?v.q3target:'-')+" </td>\n\
+                    <td style='border:solid;border-width: thin;border-style:solid;' >"+(v.q4target!=null?v.q4target:'-')+"  </td>\n\
+                    <td style='border:solid;border-width: thin;border-style:solid;max-width:100px;' >"+((v.q1target!=null?parseInt(v.q1target):0)+
                                 (v.q2target!=null?parseInt(v.q2target):0)+
                                 (v.q3target!=null?parseInt(v.q3target):0)+
                                 (v.q4target!=null?parseInt(v.q4target):0))+" </td>";
             break;
             case  'percentage':
-                inp ="<td >"+(v.q1target!=null?v.q1target:'-')+" </td>\n\
-                    <td >"+(v.q2target!=null?v.q2target:'-')+" </td>\n\
-                    <td >"+(v.q3target!=null?v.q3target:'-')+" </td>\n\
-                    <td >"+(v.q4target!=null?v.q4target:'-')+" </td>\n\
-                    <td > "+((v.q1target!=null?parseInt(v.q1target):0)+
+                inp ="<td style='border:solid;border-width: thin;border-style:solid;' >"+(v.q1target!=null?v.q1target:'-')+" </td>\n\
+                    <td style='border:solid;border-width: thin;border-style:solid;' >"+(v.q2target!=null?v.q2target:'-')+" </td>\n\
+                    <td style='border:solid;border-width: thin;border-style:solid;' >"+(v.q3target!=null?v.q3target:'-')+" </td>\n\
+                    <td style='border:solid;border-width: thin;border-style:solid;' >"+(v.q4target!=null?v.q4target:'-')+" </td>\n\
+                    <td style='border:solid;border-width: thin;border-style:solid;max-width:100px;' > "+((v.q1target!=null?parseInt(v.q1target):0)+
                                 (v.q2target!=null?parseInt(v.q2target):0)+
                                 (v.q3target!=null?parseInt(v.q3target):0)+
                                 (v.q4target!=null?parseInt(v.q4target):0))+"%</td>";
                 break;
             case 'rating':
-                  inp ="<td >"+(v.q1target!=null?v.q1target:'-')+" </td>\n\
-                    <td >"+(v.q2target!=null?v.q2target:'-')+" </td>\n\
-                    <td >"+(v.q3target!=null?v.q3target:'-')+"  </td>\n\
-                    <td >"+(v.q4target!=null?v.q4target:'-')+" </td>\n\
-                    <td > "+((v.q1target!=null?parseInt(v.q1target):0)+
+                  inp ="<td style='border:solid;border-width: thin;border-style:solid;' >"+(v.q1target!=null?v.q1target:'-')+" </td>\n\
+                    <td style='border:solid;border-width: thin;border-style:solid;' >"+(v.q2target!=null?v.q2target:'-')+" </td>\n\
+                    <td style='border:solid;border-width: thin;border-style:solid;' >"+(v.q3target!=null?v.q3target:'-')+"  </td>\n\
+                    <td style='border:solid;border-width: thin;border-style:solid;' >"+(v.q4target!=null?v.q4target:'-')+" </td>\n\
+                    <td style='border:solid;border-width: thin;border-style:solid;max-width:100px;' > "+((v.q1target!=null?parseInt(v.q1target):0)+
                                 (v.q2target!=null?parseInt(v.q2target):0)+
                                 (v.q3target!=null?parseInt(v.q3target):0)+
                                 (v.q4target!=null?parseInt(v.q4target):0))+"Ave</td>";
                 break;
             case 'boolean':
-                  inp ="<td > "+(v.q1target!=null?v.q1target:'-')+" </td>\n\
-                   <td >   "+(v.q2target!=null?v.q2target:'-')+"</td>\n\
-                    <td >  "+(v.q3target!=null?v.q3target:'-')+"</td>\n\
-                    <td >   "+(v.q4target!=null?v.q4target:'-')+" </td>\n\
-                    <td ><label>-</label></td>";
+                  inp ="<td style='border:solid;border-width: thin;border-style:solid;' > "+(v.q1target!=null?v.q1target:'-')+" </td>\n\
+                   <td style='border:solid;border-width: thin;border-style:solid;' >   "+(v.q2target!=null?v.q2target:'-')+"</td>\n\
+                    <td style='border:solid;border-width: thin;border-style:solid;' >  "+(v.q3target!=null?v.q3target:'-')+"</td>\n\
+                    <td style='border:solid;border-width: thin;border-style:solid;' >   "+(v.q4target!=null?v.q4target:'-')+" </td>\n\
+                    <td style='border:solid;border-width: thin;border-style:solid;max-width:100px;' ><label>-</label></td>";
                 break;
                  default:
-                    inp ="<td ></td>\n\
-                    <td ></td>\n\
-                    <td ></td>\n\
-                    <td ></td>\n\
-                    <td ></td>";
+                    inp ="<td style='border:solid;border-width: thin;border-style:solid;' ></td>\n\
+                    <td style='border:solid;border-width: thin;border-style:solid;' ></td>\n\
+                    <td style='border:solid;border-width: thin;border-style:solid;' ></td>\n\
+                    <td style='border:solid;border-width: thin;border-style:solid;' ></td>\n\
+                    <td style='border:solid;border-width: thin;border-style:solid;max-width:100px;' ></td>";
     
     }
             }else{
-                inp ="<td ></td>\n\
-<td ></td>\n\
-<td ></td>\n\
-<td ></td>\n\
-<td ></td>";
+                inp ="<td style='border:solid;border-width: thin;border-style:solid;' ></td>\n\
+<td style='border:solid;border-width: thin;border-style:solid;' ></td>\n\
+<td style='border:solid;border-width: thin;border-style:solid;' ></td>\n\
+<td style='border:solid;border-width: thin;border-style:solid;' ></td>\n\
+<td style='border:solid;border-width: thin;border-style:solid;max-width:100px;' ></td>";
                 
             }
             
          row += "<tr> \n\
-     <td style='font-style:"+v.style+";font-weight:"+v.style+"'>"+v.indicator_name+" </td>"+inp+"</tr>";
+     <td colspan=2 style='border:solid;border-width: thin;border-style:solid;font-style:"+v.style+";font-weight:"+v.style+"'>"+v.indicator_name+" </td>"+inp+"</tr>";
          indicator = v.id;
 
 }
@@ -279,62 +281,62 @@ $(document).ready(function(){
              switch(v.sub1_type){
                     
             case 'quantity':
-                inp ="<td > "+(v.sub1_q1target!=null?v.sub1_q1target:'-')+" </td>\n\
-                    <td >"+(v.sub1_q2target!=null?v.sub1_q2target:'-')+"  </td>\n\
-                    <td >"+(v.sub1_q3target!=null?v.sub1_q3target:'-')+" </td>\n\
-                    <td >"+(v.sub1_q4target!=null?v.sub1_q4target:'-')+"</td>\n\
-                    <td > "+((v.sub1_q1target!=null?parseInt(v.sub1_q1target):0)+
+                inp ="<td style='border:solid;border-width: thin;border-style:solid;' > "+(v.sub1_q1target!=null?v.sub1_q1target:'-')+" </td>\n\
+                    <td style='border:solid;border-width: thin;border-style:solid;' >"+(v.sub1_q2target!=null?v.sub1_q2target:'-')+"  </td>\n\
+                    <td style='border:solid;border-width: thin;border-style:solid;' >"+(v.sub1_q3target!=null?v.sub1_q3target:'-')+" </td>\n\
+                    <td style='border:solid;border-width: thin;border-style:solid;' >"+(v.sub1_q4target!=null?v.sub1_q4target:'-')+"</td>\n\
+                    <td style='border:solid;border-width: thin;border-style:solid;max-width:100px;' > "+((v.sub1_q1target!=null?parseInt(v.sub1_q1target):0)+
                                 (v.sub1_q2target!=null?parseInt(v.sub1_q2target):0)+
                                 (v.sub1_q3target!=null?parseInt(v.sub1_q3target):0)+
                                 (v.sub1_q4target!=null?parseInt(v.sub1_q4target):0))+" </td>";
             break;
             case  'percentage':
-                inp ="<td >"+(v.sub1_q1target!=null?v.sub1_q1target:'-')+"  </td>\n\
-                    <td >"+(v.sub1_q2target!=null?v.sub1_q2target:'-')+" </td>\n\
-                    <td >"+(v.sub1_q3target!=null?v.sub1_q3target:'-')+"  </td>\n\
-                    <td >"+(v.sub1_q4target!=null?v.sub1_q4target:'-')+"  </td>\n\
-                    <td > "+((v.sub1_q1target!=null?parseInt(v.sub1_q1target):0)+
+                inp ="<td style='border:solid;border-width: thin;border-style:solid;' >"+(v.sub1_q1target!=null?v.sub1_q1target:'-')+"  </td>\n\
+                    <td style='border:solid;border-width: thin;border-style:solid;' >"+(v.sub1_q2target!=null?v.sub1_q2target:'-')+" </td>\n\
+                    <td style='border:solid;border-width: thin;border-style:solid;' >"+(v.sub1_q3target!=null?v.sub1_q3target:'-')+"  </td>\n\
+                    <td style='border:solid;border-width: thin;border-style:solid;' >"+(v.sub1_q4target!=null?v.sub1_q4target:'-')+"  </td>\n\
+                    <td style='border:solid;border-width: thin;border-style:solid;max-width:100px;' > "+((v.sub1_q1target!=null?parseInt(v.sub1_q1target):0)+
                                 (v.sub1_q2target!=null?parseInt(v.sub1_q2target):0)+
                                 (v.sub1_q3target!=null?parseInt(v.sub1_q3target):0)+
                                 (v.sub1_q4target!=null?parseInt(v.sub1_q4target):0))+"%</td>";
                 break;
             case 'rating':
-                  inp ="<td >"+(v.sub1_q1target!=null?v.sub1_q1target:'-')+"  </td>\n\
-                    <td >"+(v.sub1_q2target!=null?v.sub1_q2target:'-')+"  </td>\n\
-                    <td >"+(v.sub1_q3target!=null?v.sub1_q3target:'-')+"  </td>\n\
-                    <td >"+(v.sub1_q4target!=null?v.sub1_q4target:'-')+"  </td>\n\
-                    <td ><label> "+(((v.sub1_q1target!=null?parseInt(v.sub1_q1target):0)+
+                  inp ="<td style='border:solid;border-width: thin;border-style:solid;' >"+(v.sub1_q1target!=null?v.sub1_q1target:'-')+"  </td>\n\
+                    <td style='border:solid;border-width: thin;border-style:solid;' >"+(v.sub1_q2target!=null?v.sub1_q2target:'-')+"  </td>\n\
+                    <td style='border:solid;border-width: thin;border-style:solid;' >"+(v.sub1_q3target!=null?v.sub1_q3target:'-')+"  </td>\n\
+                    <td style='border:solid;border-width: thin;border-style:solid;' >"+(v.sub1_q4target!=null?v.sub1_q4target:'-')+"  </td>\n\
+                    <td style='border:solid;border-width: thin;border-style:solid;max-width:100px;' ><label> "+(((v.sub1_q1target!=null?parseInt(v.sub1_q1target):0)+
                                 (v.sub1_q2target!=null?parseInt(v.sub1_q2target):0)+
                                 (v.sub1_q3target!=null?parseInt(v.sub1_q3target):0)+
                                 (v.sub1_q4target!=null?parseInt(v.sub1_q4target):0))/4)+" Ave</td>";
                 break;
             case 'boolean':
-                  inp ="<td > "+(v.sub1_q1target!=null?v.sub1_q1target:'-')+"</td>\n\
-                   <td >   "+(v.sub1_q2target!=null?v.sub1_q2target:'-')+"</td>\n\
-                    <td >  "+(v.sub1_q3target!=null?v.sub1_q3target:'-')+"</td>\n\
-                    <td >   "+(v.sub1_q4target!=null?v.sub1_q4target:'-')+"</td>\n\
-                    <td ><label>-</label></td>";
+                  inp ="<td style='border:solid;border-width: thin;border-style:solid;' > "+(v.sub1_q1target!=null?v.sub1_q1target:'-')+"</td>\n\
+                   <td style='border:solid;border-width: thin;border-style:solid;' >   "+(v.sub1_q2target!=null?v.sub1_q2target:'-')+"</td>\n\
+                    <td style='border:solid;border-width: thin;border-style:solid;' >  "+(v.sub1_q3target!=null?v.sub1_q3target:'-')+"</td>\n\
+                    <td style='border:solid;border-width: thin;border-style:solid;' >   "+(v.sub1_q4target!=null?v.sub1_q4target:'-')+"</td>\n\
+                    <td style='border:solid;border-width: thin;border-style:solid;max-width:100px;' ><label>-</label></td>";
                 break;
                  default:
-                    inp ="<td ></td>\n\
-                    <td ></td>\n\
-                    <td ></td>\n\
-                    <td ></td>\n\
-                    <td ></td>";
+                    inp ="<td style='border:solid;border-width: thin;border-style:solid;' ></td>\n\
+                    <td style='border:solid;border-width: thin;border-style:solid;' ></td>\n\
+                    <td style='border:solid;border-width: thin;border-style:solid;' ></td>\n\
+                    <td style='border:solid;border-width: thin;border-style:solid;' ></td>\n\
+                    <td style='border:solid;border-width: thin;border-style:solid;max-width:100px;' ></td>";
                 
     
     }
                 
             }else{
-                inp ="<td ></td>\n\
-<td ></td>\n\
-<td ></td>\n\
-<td ></td>\n\
-<td ></td>";
+                inp ="<td style='border:solid;border-width: thin;border-style:solid;' ></td>\n\
+<td style='border:solid;border-width: thin;border-style:solid;' ></td>\n\
+<td style='border:solid;border-width: thin;border-style:solid;' ></td>\n\
+<td style='border:solid;border-width: thin;border-style:solid;' ></td>\n\
+<td style='border:solid;border-width: thin;border-style:solid;max-width:100px;' ></td>";
                 
             }
             
-         row += "<tr> <td style='font-style:"+v.sub1_style+";font-weight:"+v.sub1_style+"'>&nbsp;&nbsp;&nbsp;"+v.sub1_indicator_name+"      </td>"+inp+"</tr>";
+         row += "<tr> <td colspan=2 style='border:solid;border-width: thin;border-style:solid;font-style:"+v.sub1_style+";font-weight:"+v.sub1_style+"'>&nbsp;&nbsp;&nbsp;"+v.sub1_indicator_name+"      </td>"+inp+"</tr>";
          indicator1 = v.sub1_id;
      
         }
@@ -344,55 +346,55 @@ $(document).ready(function(){
              switch(v.sub2_type){//ssdsdsd
                     
            case 'quantity':
-                inp ="<td > "+(v.sub2_q1target!=null?v.sub2_q1target:'-')+" </td>\n\
-                    <td >"+(v.sub2_q2target!=null?v.sub2_q2target:'-')+"   </td>\n\
-                    <td >"+(v.sub2_q3target!=null?v.sub2_q3target:'-')+"  </td>\n\
-                    <td >"+(v.sub2_q4target!=null?v.sub2_q4target:'-')+"  </td>\n\
-                    <td > "+((v.sub2_q1target!=null?parseInt(v.sub2_q1target):0)+
+                inp ="<td style='border:solid;border-width: thin;border-style:solid;' > "+(v.sub2_q1target!=null?v.sub2_q1target:'-')+" </td>\n\
+                    <td style='border:solid;border-width: thin;border-style:solid;' >"+(v.sub2_q2target!=null?v.sub2_q2target:'-')+"   </td>\n\
+                    <td style='border:solid;border-width: thin;border-style:solid;' >"+(v.sub2_q3target!=null?v.sub2_q3target:'-')+"  </td>\n\
+                    <td style='border:solid;border-width: thin;border-style:solid;' >"+(v.sub2_q4target!=null?v.sub2_q4target:'-')+"  </td>\n\
+                    <td style='border:solid;border-width: thin;border-style:solid;max-width:100px;' > "+((v.sub2_q1target!=null?parseInt(v.sub2_q1target):0)+
                                 (v.sub2_q2target!=null?parseInt(v.sub2_q2target):0)+
                                 (v.sub2_q3target!=null?parseInt(v.sub2_q3target):0)+
                                 (v.sub2_q4target!=null?parseInt(v.sub2_q4target):0))+" </td>";
             break;
             case  'percentage':
-                inp ="<td >"+(v.sub2_q1target!=null?v.sub2_q1target:'-')+"  </td>\n\
-                    <td >"+(v.sub2_q2target!=null?v.sub2_q2target:'-')+"  </td>\n\
-                    <td >"+(v.sub2_q3target!=null?v.sub2_q3target:'-')+"  </td>\n\
-                    <td >"+(v.sub2_q4target!=null?v.sub2_q4target:'-')+"  </td>\n\
-                    <td > "+((v.sub2_q1target!=null?parseInt(v.sub2_q1target):0)+
+                inp ="<td style='border:solid;border-width: thin;border-style:solid;' >"+(v.sub2_q1target!=null?v.sub2_q1target:'-')+"  </td>\n\
+                    <td style='border:solid;border-width: thin;border-style:solid;' >"+(v.sub2_q2target!=null?v.sub2_q2target:'-')+"  </td>\n\
+                    <td style='border:solid;border-width: thin;border-style:solid;' >"+(v.sub2_q3target!=null?v.sub2_q3target:'-')+"  </td>\n\
+                    <td style='border:solid;border-width: thin;border-style:solid;' >"+(v.sub2_q4target!=null?v.sub2_q4target:'-')+"  </td>\n\
+                    <td style='border:solid;border-width: thin;border-style:solid;max-width:100px;' > "+((v.sub2_q1target!=null?parseInt(v.sub2_q1target):0)+
                                 (v.sub2_q2target!=null?parseInt(v.sub2_q2target):0)+
                                 (v.sub2_q3target!=null?parseInt(v.sub2_q3target):0)+
                                 (v.sub2_q4target!=null?parseInt(v.sub2_q4target):0))+"%</td>";
                 break;
             case 'rating':
-                  inp ="<td >"+(v.sub2_q1target!=null?v.sub2_q1target:'-')+"  </td>\n\
-                    <td >"+(v.sub2_q2target!=null?v.sub2_q2target:'-')+"  </td>\n\
-                    <td >"+(v.sub2_q3target!=null?v.sub2_q3target:'-')+"  </td>\n\
-                    <td >"+(v.sub2_q4target!=null?v.sub2_q4target:'-')+"  </td>\n\
-                    <td ><label> "+(((v.sub2_q1target!=null?parseInt(v.sub2_q1target):0)+
+                  inp ="<td style='border:solid;border-width: thin;border-style:solid;' >"+(v.sub2_q1target!=null?v.sub2_q1target:'-')+"  </td>\n\
+                    <td style='border:solid;border-width: thin;border-style:solid;' >"+(v.sub2_q2target!=null?v.sub2_q2target:'-')+"  </td>\n\
+                    <td style='border:solid;border-width: thin;border-style:solid;' >"+(v.sub2_q3target!=null?v.sub2_q3target:'-')+"  </td>\n\
+                    <td style='border:solid;border-width: thin;border-style:solid;' >"+(v.sub2_q4target!=null?v.sub2_q4target:'-')+"  </td>\n\
+                    <td style='border:solid;border-width: thin;border-style:solid;max-width:100px;' ><label> "+(((v.sub2_q1target!=null?parseInt(v.sub2_q1target):0)+
                                 (v.sub2_q2target!=null?parseInt(v.sub2_q2target):0)+
                                 (v.sub2_q3target!=null?parseInt(v.sub2_q3target):0)+
                                 (v.sub2_q4target!=null?parseInt(v.sub2_q4target):0))/4)+" Ave</label></td>";
                 break;
             case 'boolean':
-                  inp ="<td > "+(v.sub2_q1target!=null?v.sub2_q1target:'-')+"</td>\n\
-                   <td >   "+(v.sub2_q2target!=null?v.sub2_q2target:'-')+"</td>\n\
-                    <td >  "+(v.sub2_q3target!=null?v.sub2_q3target:'-')+"</td>\n\
-                    <td >   "+(v.sub2_q4target!=null?v.sub2_q4target:'-')+"</td>\n\
-                    <td ><label>-</label></td>";
+                  inp ="<td style='border:solid;border-width: thin;border-style:solid;' > "+(v.sub2_q1target!=null?v.sub2_q1target:'-')+"</td>\n\
+                   <td style='border:solid;border-width: thin;border-style:solid;' >   "+(v.sub2_q2target!=null?v.sub2_q2target:'-')+"</td>\n\
+                    <td style='border:solid;border-width: thin;border-style:solid;' >  "+(v.sub2_q3target!=null?v.sub2_q3target:'-')+"</td>\n\
+                    <td style='border:solid;border-width: thin;border-style:solid;' >   "+(v.sub2_q4target!=null?v.sub2_q4target:'-')+"</td>\n\
+                    <td style='border:solid;border-width: thin;border-style:solid;max-width:100px;' ><label>-</label></td>";
                 break;
                 
             default:
-                    inp ="<td ></td>\n\
-                    <td ></td>\n\
-                    <td ></td>\n\
-                    <td ></td>\n\
-                    <td ></td>";
+                    inp ="<td style='border:solid;border-width: thin;border-style:solid;' ></td>\n\
+                    <td style='border:solid;border-width: thin;border-style:solid;' ></td>\n\
+                    <td style='border:solid;border-width: thin;border-style:solid;' ></td>\n\
+                    <td style='border:solid;border-width: thin;border-style:solid;' ></td>\n\
+                    <td style='border:solid;border-width: thin;border-style:solid;max-width:100px;' ></td>";
     
     }
   
              
              
-         row += "<tr> <td style='font-style:"+v.sub2_style+";font-weight:"+v.sub2_style+"'    >&nbsp;&nbsp;&nbsp;&nbsp;"+v.sub2_indicator_name+" </td>"+inp+"</tr>";
+         row += "<tr> <td colspan=2 style='border:solid;border:solid;border-width: thin;border-style:solid;font-style:"+v.sub2_style+";font-weight:"+v.sub2_style+"'    >&nbsp;&nbsp;&nbsp;&nbsp;"+v.sub2_indicator_name+" </td>"+inp+"</tr>";
     
          indicator2= v.sub2_id;
        
@@ -406,9 +408,39 @@ $(document).ready(function(){
        
         
        });
-       
+      var foot =   "    <tr >\n\
+      <td  style='border:none;'><br/>Prepared by:<br/><br/></td>\n\
+      <td  style='border:none;min-width:30px'></td>\n\
+      <td colspan=5 style='border:none;'></td>\n\
+    </tr>\n\
+    <tr >\n\
+      <td colspan=2 style='border:none;'><b>SIGNATURE</b></td>\n\
+      <td style='border:none;' ><b>SIGNATURE</b></td>\n\
+      <td colspan=5 style='border:none;' ><b>SIGNATURE</b></td>\n\
+    </tr>\n\
+    <tr>\n\
+      <td colspan=2 style='border:none;'>Position</td>\n\
+      <td style='border:none;'  >Position</td>\n\
+      <td colspan=5 style='border:none;' >Position</td>\n\
+    </tr>\n\
+<tr>\n\
+      <td colspan=2 style='border:none;' ></td>\n\
+      <td style='border:none;' align=center ><br/>Approved by:<br/><br/></td>\n\
+      <td colspan=5 style='border:none;'></td>\n\
+    </tr>\n\
+    <tr>\n\
+      <td colspan=2 style='border:none;' ></td>\n\
+      <td style='border:none;' align=center ><b>DIRECTOR</b></td>\n\
+      <td colspan=5 style='border:none;'></td>\n\
+    </tr>\n\
+    <tr>\n\
+      <td style='border:none;' colspan=2 ></td>\n\
+      <td style='border:none;'align=center >Position</td>\n\
+      <td colspan=5 style='border:none;'></td>\n\
+    </tr>";
       
-       tbody.html($(row))
+       tbody.html($(row+foot))
+       
        
        
       

@@ -94,8 +94,11 @@ $(document).ready(function(){
         
     })
     year_list.done(function(xhr){
+       
+
     var sel =  $('#year_dd').empty();
- var selected =  $.cookie('year_selection');
+    var selected =  $.cookie('year_selection');
+    
     $.each(xhr,function(i,v){
         
         sel.append('<option '+(v.year == selected?"selected":"")+' value='+v.year+'>'+v.year+'</option>')
@@ -322,14 +325,14 @@ $.each(inpt,function(i,v){
            
       
        
-            row += '<tr ><td rowspan="'+(parseInt(v.countme)+1)+'" style="background-color:#b9bdc4;max-width:100px;"><b>'+v.obj_name+'</b></td></tr>';
+            row += '<tr ><td rowspan="'+(parseInt(v.countme)+1)+'" style="background-color:#b9bdc4;max-width:100px;"><b>'+v.obj_name+'</p></b></td>'+(parseInt(v.countme)>=1?(parseInt(v.countme)<=5?"<td colspan=6>":""):"")+'</tr>';
             objective = v.obj_id;
     
       
        }
         
     
-        if(v.id !== indicator && v.indicator_name !== null){
+        if(v.id!==null&&v.id !== indicator && v.indicator_name !== null){
             
             var inp = "";
             
@@ -391,7 +394,7 @@ $.each(inpt,function(i,v){
          indicator = v.id;
 
 }
-         if(v.sub1_id !== indicator1&& v.sub1_indicator_name !== null){
+         if(v.sub1_id!==null&&v.sub1_id !== indicator1&& v.sub1_indicator_name !== null){
                var inp = "";
             if(v.sub2_id === null){
              switch(v.sub1_type){
@@ -451,7 +454,7 @@ $.each(inpt,function(i,v){
          indicator1 = v.sub1_id;
      
         }
-         if(v.sub2_id !== indicator2 && v.sub2_indicator_name !== null){
+         if(v.sub2_id!==null&&v.sub2_id !== indicator2 && v.sub2_indicator_name !== null){
              var inp = "";
              
              switch(v.sub2_type){//ssdsdsd
