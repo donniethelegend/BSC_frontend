@@ -40,7 +40,7 @@
         
               
          
-        <table id ="tbl_indicatorslist" style="border-collapse:collapse;width:100%; font-family:Arial, sans-serif;font-size:11px; white-space:normal;"   class="table table-sm">
+        <table id ="tbl_indicatorslist" style="border-collapse:collapse;width:100%; font-family:Arial, sans-serif;font-size:10px; white-space:normal;"   class="table table-sm">
           <thead>
             <tr>
               
@@ -77,7 +77,7 @@
 $(document).ready(function(){
     
     
-    
+  
     
     
       $(document).on('click', '.loadcontent',function(){
@@ -91,6 +91,7 @@ $(document).ready(function(){
     
      var province_list    = new serverData("<?php /*URL in based64*/ echo base64_encode('beans=json/getprovinces'); ?>"  );// 1st parameter is the beans name; 2nd parameter is the data, in serializedArray format
      var year_list    = new serverData("<?php /*URL in based64*/ echo base64_encode('beans=json/getyear_from_deadlines'); ?>"  );// 1st parameter is the beans name; 2nd parameter is the data, in serializedArray format
+    
     
     
     province_list.done(function(xhr){
@@ -113,6 +114,13 @@ $(document).ready(function(){
     })
         
     })
+    var signatories_list = new serverData("<?php /*URL in based64*/ echo base64_encode('beans=json/get_activesignatories'); ?>",null);
+   
+       signatories_list.done(function(xhr){
+          // $.cookie('indicatordata',JSON.stringify(xhr));
+           localStorage.setItem('signatories',JSON.stringify(xhr))
+           
+       })
     
     
     $('#province_dd').change(function(){
@@ -408,20 +416,30 @@ $(document).ready(function(){
        
         
        });
+      
+   
+       
+       
+        var sign_1    = findJSON(JSON.parse(localStorage.getItem('signatories')),"ARD Field Operations")[0]
+        var sign_2    = findJSON(JSON.parse(localStorage.getItem('signatories')),"ARD for Finance and Administrative Services")[0]
+        var sign_3    = findJSON(JSON.parse(localStorage.getItem('signatories')),"ARD for Technical Services")[0]
+        var sign_4    = findJSON(JSON.parse(localStorage.getItem('signatories')),"Regional Director")[0]
+       
+       
       var foot =   "    <tr >\n\
       <td  style='border:none;'><br/>Prepared by:<br/><br/></td>\n\
       <td  style='border:none;min-width:30px'></td>\n\
       <td colspan=5 style='border:none;'></td>\n\
     </tr>\n\
     <tr >\n\
-      <td colspan=2 style='border:none;'><b>SIGNATURE</b></td>\n\
-      <td style='border:none;' ><b>SIGNATURE</b></td>\n\
-      <td colspan=5 style='border:none;' ><b>SIGNATURE</b></td>\n\
+      <td colspan=2 style='border:none;'><b>"+sign_1.fullname+"</b></td>\n\
+      <td style='border:none;' ><b>"+sign_2.fullname+"</b></td>\n\
+      <td colspan=5 style='border:none;' ><b>"+sign_3.fullname+"</b></td>\n\
     </tr>\n\
     <tr>\n\
-      <td colspan=2 style='border:none;'>Position</td>\n\
-      <td style='border:none;'  >Position</td>\n\
-      <td colspan=5 style='border:none;' >Position</td>\n\
+      <td colspan=2 style='border:none;'>"+sign_1.position+"</td>\n\
+      <td style='border:none;'  >"+sign_2.position+"</td>\n\
+      <td colspan=5 style='border:none;' >"+sign_3.position+"</td>\n\
     </tr>\n\
 <tr>\n\
       <td colspan=2 style='border:none;' ></td>\n\
@@ -430,12 +448,12 @@ $(document).ready(function(){
     </tr>\n\
     <tr>\n\
       <td colspan=2 style='border:none;' ></td>\n\
-      <td style='border:none;' align=center ><b>DIRECTOR</b></td>\n\
+      <td style='border:none;' align=center ><b>"+sign_4.fullname+"</b></td>\n\
       <td colspan=5 style='border:none;'></td>\n\
     </tr>\n\
     <tr>\n\
       <td style='border:none;' colspan=2 ></td>\n\
-      <td style='border:none;'align=center >Position</td>\n\
+      <td style='border:none;'align=center >"+sign_4.position+"</td>\n\
       <td colspan=5 style='border:none;'></td>\n\
     </tr>";
       

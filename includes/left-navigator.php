@@ -88,6 +88,13 @@
             </a>
           </li>
           
+          <li class="nav-item">
+            <a class="nav-link <?php   echo $_getParam['form']=='signatories_mgmt'?"active":''; ?>" href="./?<?php echo base64_encode("form=signatories_mgmt"); ?>">
+              <span data-feather="user-check"></span>
+             Signatories
+            </a>
+          </li>
+          
           <?php } ?>
           
            <li class="nav-item">

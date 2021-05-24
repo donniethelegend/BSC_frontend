@@ -1,7 +1,20 @@
 <script>
    
 
-
+function findJSON(obj,needle){
+   var s = [];
+Object.keys(obj).map(function(key, index) {
+    if(JSON.stringify(obj[key]).search(needle)>0){
+s.push(obj[key]);
+    }
+});
+return s
+   }
+     $(document).bind("keyup keydown", function(e){
+    if(e.ctrlKey && e.keyCode == 80){
+        $('button.printtable').click();
+    }
+});
     
 
     var serverData =  function(urlname,data){
